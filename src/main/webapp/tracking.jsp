@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - BAKETRAK</title>
+    <title>Seguimiento de Pedido - BAKETRAK</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -20,24 +20,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <c:choose>
-                        <c:when test="${sessionScope.user != null}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">${sessionScope.user.username}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="logout">Cerrar Sesión</a>
-                            </li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">Iniciar Sesión</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="register.jsp">Crear Cuenta</a>
-                            </li>
-                        </c:otherwise>
-                    </c:choose>
+                    <li class="nav-item" id="login-nav-item">
+                        <a class="nav-link" href="#">${sessionScope.user.username}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -49,7 +37,7 @@
             <div class="collapse navbar-collapse" id="navbarSecondary">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">Inicio</a>
+                        <a class="nav-link" href="index.jsp">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="combosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,49 +81,46 @@
         </div>
     </nav>
 
-    <!-- Contenido Principal -->
-    <main class="container">
-        <section id="home-view">
-            <h2 class="text-center mb-4">Bienvenido a BAKETRAK</h2>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan artesanal rústico">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Artesanal</h5>
-                            <p class="card-text">$5.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/4109998/pexels-photo-4109998.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pastel de chocolate con glaseado cremoso">
-                        <div class="card-body">
-                            <h5 class="card-title">Pastel de Chocolate</h5>
-                            <p class="card-text">$15.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan integral rebanado">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Integral</h5>
-                            <p class="card-text">$8.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
+    <!-- Vista Seguimiento de Pedido -->
+    <section id="tracking-view" class="container mt-5">
+        <h2 class="text-center mb-4">BAKETRAK - Seguimiento de Pedido</h2>
+        <div class="mb-3">
+            <a href="history.jsp" class="btn btn-primary">Volver a Historial de Pedidos</a>
+        </div>
+        <div class="accordion" id="trackingAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="trackingHeader">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#trackingCollapse" aria-expanded="true" aria-controls="trackingCollapse">
+                        Pedido #${order.id}
+                    </button>
+                </h2>
+                <div id="trackingCollapse" class="accordion-collapse collapse show" aria-labelledby="trackingHeader">
+                    <div class="accordion-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Estado Actual</th>
+                                    <th>Dirección de Entrega</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${order.status}</td>
+                                    <td>${order.address}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <c:if test="${sessionScope.user != null}">
-                <div class="text-center">
-                    <a href="history.jsp" class="btn btn-custom-green mt-3">Ver Historial de Pedidos</a>
-                </div>
-            </c:if>
-        </section>
-    </main>
+        </div>
+        <div class="mt-4">
+            <h5>Mapa en Tiempo Real</h5>
+            <div id="map" style="height: 400px; background-color: #E0E0E0; display: flex; align-items: center; justify-content: center;">
+                <p>Placeholder para mapa en tiempo real (por ejemplo, Google Maps)</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Pie de Página -->
     <footer>
@@ -155,35 +140,3 @@
                     <p>¿Tienes alguna pregunta? Siempre estamos aquí para ayudarte<br>
                     El horario del Equipo de Atención al Consumidor es de lunes a viernes, de 9 a. m. a 5 p. m.</p>
                 </div>
-            </div>
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="social-icons d-flex">
-                        <a href="https://wa.me/+573124567890" aria-label="Contactar por WhatsApp" target="_blank">
-                            <i class="bi bi-whatsapp me-2" aria-hidden="true"></i> +57 312 456 7890
-                        </a>
-                        <a href="https://www.facebook.com/BAKETRAKColombia" aria-label="Página de Facebook" target="_blank">
-                            <i class="bi bi-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://www.instagram.com/BAKETRAK_Colombia" aria-label="Página de Instagram" target="_blank">
-                            <i class="bi bi-instagram" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://www.twitter.com/BAKETRAKCol" aria-label="Página de Twitter" target="_blank">
-                            <i class="bi bi-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://www.youtube.com/@BAKETRAKColombia" aria-label="Canal de YouTube" target="_blank">
-                            <i class="bi bi-youtube" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-6 text-end copyright">
-                    <p>© 2025 BAKETRAK. Todos los derechos reservados.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/script.js"></script>
-</body>
-</html>

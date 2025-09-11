@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - BAKETRAK</title>
+    <title>Historial de Pedidos - BAKETRAK</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -20,24 +20,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <c:choose>
-                        <c:when test="${sessionScope.user != null}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">${sessionScope.user.username}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="logout">Cerrar Sesión</a>
-                            </li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">Iniciar Sesión</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="register.jsp">Crear Cuenta</a>
-                            </li>
-                        </c:otherwise>
-                    </c:choose>
+                    <li class="nav-item" id="login-nav-item">
+                        <a class="nav-link" href="#">${sessionScope.user.username}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -49,7 +37,7 @@
             <div class="collapse navbar-collapse" id="navbarSecondary">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">Inicio</a>
+                        <a class="nav-link" href="index.jsp">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="combosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,49 +81,60 @@
         </div>
     </nav>
 
-    <!-- Contenido Principal -->
-    <main class="container">
-        <section id="home-view">
-            <h2 class="text-center mb-4">Bienvenido a BAKETRAK</h2>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan artesanal rústico">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Artesanal</h5>
-                            <p class="card-text">$5.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
+    <!-- Vista Historial de Pedidos -->
+    <section id="history-view" class="container mt-5">
+        <h2 class="text-center mb-4">BAKETRAK - Historial de Pedidos</h2>
+        <div class="accordion" id="orderHistoryAccordion">
+            <c:forEach var="order" items="${orders}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading${order.id}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${order.id}" aria-expanded="true" aria-controls="collapse${order.id}">
+                            Pedido #${order.id}
+                        </button>
+                    </h2>
+                    <div id="collapse${order.id}" class="accordion-collapse collapse" aria-labelledby="heading${order.id}" data-bs-parent="#orderHistoryAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Número de Producto</th>
+                                        <th>Nombre del Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Número de Seguimiento</th>
+                                        <th>Precio</th>
+                                        <th>Estado Actual</th>
+                                        <th>Anulación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="detail" items="${order.details}">
+                                        <tr>
+                                            <td>${detail.id}</td>
+                                            <td>${detail.product.name}</td>
+                                            <td>${detail.quantity}</td>
+                                            <td><a href="tracking.jsp?orderId=${order.id}">${detail.trackingNumber}</a></td>
+                                            <td>$${detail.price}</td>
+                                            <td>${order.status}</td>
+                                            <td>
+                                                <c:if test="${order.status != 'Cancelado' && order.status != 'Entregado'}">
+                                                    <button class="btn btn-danger btn-sm" onclick="showCancelConfirm('${order.id}')">Anular</button>
+                                                    <div id="cancel-confirm-${order.id}" class="mt-2" style="display: none;">
+                                                        <p>¿Estás seguro?</p>
+                                                        <button class="btn btn-danger btn-sm me-2" onclick="cancelOrder('${order.id}')">Sí</button>
+                                                        <button class="btn btn-secondary btn-sm" onclick="hideCancelConfirm('${order.id}')">No</button>
+                                                    </div>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/4109998/pexels-photo-4109998.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pastel de chocolate con glaseado cremoso">
-                        <div class="card-body">
-                            <h5 class="card-title">Pastel de Chocolate</h5>
-                            <p class="card-text">$15.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan integral rebanado">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Integral</h5>
-                            <p class="card-text">$8.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <c:if test="${sessionScope.user != null}">
-                <div class="text-center">
-                    <a href="history.jsp" class="btn btn-custom-green mt-3">Ver Historial de Pedidos</a>
-                </div>
-            </c:if>
-        </section>
-    </main>
+            </c:forEach>
+        </div>
+    </section>
 
     <!-- Pie de Página -->
     <footer>

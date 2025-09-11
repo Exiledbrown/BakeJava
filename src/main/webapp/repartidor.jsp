@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - BAKETRAK</title>
+    <title>Repartidor - BAKETRAK</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -20,24 +20,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <c:choose>
-                        <c:when test="${sessionScope.user != null}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">${sessionScope.user.username}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="logout">Cerrar Sesión</a>
-                            </li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">Iniciar Sesión</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="register.jsp">Crear Cuenta</a>
-                            </li>
-                        </c:otherwise>
-                    </c:choose>
+                    <li class="nav-item" id="login-nav-item">
+                        <a class="nav-link" href="#">${sessionScope.user.username}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -49,7 +37,7 @@
             <div class="collapse navbar-collapse" id="navbarSecondary">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">Inicio</a>
+                        <a class="nav-link" href="index.jsp">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="combosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,49 +81,24 @@
         </div>
     </nav>
 
-    <!-- Contenido Principal -->
-    <main class="container">
-        <section id="home-view">
-            <h2 class="text-center mb-4">Bienvenido a BAKETRAK</h2>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan artesanal rústico">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Artesanal</h5>
-                            <p class="card-text">$5.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/4109998/pexels-photo-4109998.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pastel de chocolate con glaseado cremoso">
-                        <div class="card-body">
-                            <h5 class="card-title">Pastel de Chocolate</h5>
-                            <p class="card-text">$15.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan integral rebanado">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Integral</h5>
-                            <p class="card-text">$8.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <c:if test="${sessionScope.user != null}">
-                <div class="text-center">
-                    <a href="history.jsp" class="btn btn-custom-green mt-3">Ver Historial de Pedidos</a>
-                </div>
-            </c:if>
-        </section>
-    </main>
+    <!-- Vista Repartidor -->
+    <section id="repartidor-view" class="container mt-5 hero">
+        <h2 class="text-center mb-4">Bienvenido, ${sessionScope.user.username}</h2>
+        <div class="mb-3">
+            <label for="filter-repartidor" class="form-label">Filtrar Pedidos:</label>
+            <input type="text" class="form-control" id="filter-repartidor" placeholder="Filtrar pedidos">
+        </div>
+        <ul class="list-group">
+            <c:forEach var="order" items="${orders}">
+                <li class="list-group-item">
+                    <h5>Pedido #${order.id}</h5>
+                    <p>Cliente: ${order.user.username}<br>Dirección: ${order.address}<br>Estado: ${order.status}</p>
+                    <a href="tracking.jsp?orderId=${order.id}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                    <a href="#" class="btn btn-success btn-sm">Validar Entrega</a>
+                </li>
+            </c:forEach>
+        </ul>
+    </section>
 
     <!-- Pie de Página -->
     <footer>

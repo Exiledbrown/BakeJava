@@ -9,44 +9,64 @@
     <packaging>war</packaging>
 
     <properties>
+        <!-- Configura Java 17 para compilación -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Jakarta Servlet -->
+        <!-- API de Servlet para Jakarta EE -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Jakarta JSP -->
+        <!-- API de JSP para Jakarta EE -->
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- JSTL -->
+        <!-- API de JSTL para procesar etiquetas JSP -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!-- Implementación de JSTL -->
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
             <version>3.0.0</version>
         </dependency>
-        <!-- MariaDB JDBC Driver -->
+        <!-- Driver de MariaDB para conexión a la base de datos -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>3.4.0</version>
         </dependency>
-        <!-- Bootstrap (WebJars) -->
+        <!-- Biblioteca jBCrypt para manejo de contraseñas (no usada actualmente) -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+        <!-- API de SLF4J para logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+        <!-- Puente de SLF4J para redirigir logs -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+        <!-- Bootstrap para estilos en vistas -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
@@ -55,8 +75,10 @@
     </dependencies>
 
     <build>
+        <!-- Nombre del archivo WAR generado -->
         <finalName>BakeJava_10</finalName>
         <plugins>
+            <!-- Plugin para compilación con Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -66,6 +88,7 @@
                     <target>17</target>
                 </configuration>
             </plugin>
+            <!-- Plugin para generar el archivo WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

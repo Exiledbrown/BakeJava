@@ -1,43 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <!-- Establece el título de la página -->
+    <title>Crear Cuenta - BAKETRAK</title>
+    <!-- Configura la vista para dispositivos móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - BAKETRAK</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluye Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Incluye Bootstrap Icons desde CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Incluye fuente Roboto desde Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Incluye estilos personalizados -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
     <!-- Barra de Navegación Principal -->
     <nav class="navbar navbar-expand-lg navbar-primary" id="main-nav">
         <div class="container-fluid">
+            <!-- Logo de la aplicación -->
             <a class="navbar-brand" href="index.jsp">BAKETRAK</a>
+            <!-- Botón para colapsar la navegación en pantallas pequeñas -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <c:choose>
-                        <c:when test="${sessionScope.user != null}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">${sessionScope.user.username}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="logout">Cerrar Sesión</a>
-                            </li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">Iniciar Sesión</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="register.jsp">Crear Cuenta</a>
-                            </li>
-                        </c:otherwise>
-                    </c:choose>
+                    <!-- Enlace para iniciar sesión -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.jsp">Iniciar Sesión</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -48,9 +41,11 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSecondary">
                 <ul class="navbar-nav mx-auto">
+                    <!-- Enlace a la página de inicio -->
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">Inicio</a>
+                        <a class="nav-link" href="index.jsp">Inicio</a>
                     </li>
+                    <!-- Menú desplegable de combos -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="combosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Combos
@@ -63,21 +58,27 @@
                             <li><a class="dropdown-item" href="#">Combo 5: Creppe Salado + Galleta Integral + Smoothie</a></li>
                         </ul>
                     </li>
+                    <!-- Enlace para ordenar online -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ordenar Online</a>
                     </li>
+                    <!-- Enlace al catálogo de pasteles -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">Catálogo de Pasteles</a>
                     </li>
+                    <!-- Enlace a la sección de heladería -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">Heladería</a>
                     </li>
+                    <!-- Enlace a la sección de creppes -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">Creppes</a>
                     </li>
+                    <!-- Enlace a la sección de waffles -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">Waffles</a>
                     </li>
+                    <!-- Menú desplegable de acerca de nosotros -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Acerca de Nosotros
@@ -93,55 +94,49 @@
         </div>
     </nav>
 
-    <!-- Contenido Principal -->
-    <main class="container">
-        <section id="home-view">
-            <h2 class="text-center mb-4">Bienvenido a BAKETRAK</h2>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan artesanal rústico">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Artesanal</h5>
-                            <p class="card-text">$5.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
+    <!-- Vista Registro -->
+    <section id="register-view" class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-4 shadow">
+                    <!-- Título de la sección -->
+                    <h2 class="text-center mb-4">Crear Cuenta</h2>
+                    <!-- Muestra mensaje de error si existe -->
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger">${error}</div>
+                    </c:if>
+                    <!-- Formulario de registro -->
+                    <form id="register-form" action="register" method="post">
+                        <div class="mb-3">
+                            <!-- Campo para el nombre de usuario -->
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu usuario" required>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/4109998/pexels-photo-4109998.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pastel de chocolate con glaseado cremoso">
-                        <div class="card-body">
-                            <h5 class="card-title">Pastel de Chocolate</h5>
-                            <p class="card-text">$15.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
+                        <div class="mb-3">
+                            <!-- Campo para la contraseña -->
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top card-img-uniform" alt="Pan integral rebanado">
-                        <div class="card-body">
-                            <h5 class="card-title">Pan Integral</h5>
-                            <p class="card-text">$8.000</p>
-                            <a href="#" class="btn btn-custom-green">Agregar al Carrito</a>
+                        <!-- Botón de envío -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Crear Cuenta</button>
                         </div>
+                    </form>
+                    <!-- Enlace para iniciar sesión -->
+                    <div class="text-center mt-3">
+                        <a href="login.jsp" class="text-primary">¿Ya tienes cuenta? Inicia sesión</a>
                     </div>
                 </div>
             </div>
-            <c:if test="${sessionScope.user != null}">
-                <div class="text-center">
-                    <a href="history.jsp" class="btn btn-custom-green mt-3">Ver Historial de Pedidos</a>
-                </div>
-            </c:if>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <!-- Pie de Página -->
     <footer>
         <div class="container">
             <div class="row align-items-center mb-3">
                 <div class="col-md-8">
+                    <!-- Enlaces del pie de página -->
                     <nav class="nav flex-row justify-content-center justify-content-md-start">
                         <a class="nav-link" href="#">Política de Privacidad</a>
                         <a class="nav-link" href="#">Condiciones de Servicio</a>
@@ -152,12 +147,14 @@
                     </nav>
                 </div>
                 <div class="col-md-4 contact-info text-end">
+                    <!-- Información de contacto -->
                     <p>¿Tienes alguna pregunta? Siempre estamos aquí para ayudarte<br>
                     El horario del Equipo de Atención al Consumidor es de lunes a viernes, de 9 a. m. a 5 p. m.</p>
                 </div>
             </div>
             <div class="row align-items-center">
                 <div class="col-md-6">
+                    <!-- Iconos de redes sociales -->
                     <div class="social-icons d-flex">
                         <a href="https://wa.me/+573124567890" aria-label="Contactar por WhatsApp" target="_blank">
                             <i class="bi bi-whatsapp me-2" aria-hidden="true"></i> +57 312 456 7890
@@ -177,13 +174,16 @@
                     </div>
                 </div>
                 <div class="col-md-6 text-end copyright">
+                    <!-- Derechos de autor -->
                     <p>© 2025 BAKETRAK. Todos los derechos reservados.</p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluye scripts de Bootstrap desde Webjars -->
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluye scripts personalizados -->
     <script src="${pageContext.request.contextPath}/js/script.js"></script>
 </body>
 </html>

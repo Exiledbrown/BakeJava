@@ -7,16 +7,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
+public class RegisterServlet extends HttpServlet {
     // Logger para registrar errores
-    private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegisterServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -28,22 +28,29 @@ public class LoginServlet extends HttpServlet {
         try {
             // Crea una instancia de UserDAO
             UserDAO userDAO = new UserDAO();
-            // Valida las credenciales del usuario
-            User user = userDAO.validateUser(username, password);
-            if (user != null) {
-                // Crea una sesión y almacena el usuario
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                // Redirige a LoadDataServlet
-                response.sendRedirect("loadData");
-            } else {
-                // Establece mensaje de error y redirige a login.jsp
-                request.setAttribute("error", "Usuario o contraseña incorrectos");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+            // Verifica si el nombre de usuario ya existe
+            User existingUser = userDAO.getUserByUsername(username);
+            if (existingUser != null) {
+                // Establece mensaje de error y redirige a register.jsp
+                request.setAttribute("error", "El nombre de usuario ya existe");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
             }
+
+            // Crea un nuevo objeto User con rol cliente
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setRole("cliente");
+            user.setCreatedAt(LocalDateTime.now());
+            // Inserta el usuario en la base de datos
+            userDAO.createUser(user);
+
+            // Redirige a login.jsp tras registro exitoso
+            response.sendRedirect("login.jsp");
         } catch (SQLException e) {
             // Registra error de base de datos
-            logger.error("Error al autenticar usuario: {}", e.getMessage(), e);
+            logger.error("Error al registrar usuario: {}", e.getMessage(), e);
             // Establece mensaje de error y redirige a error.jsp
             request.setAttribute("error", "Error en la base de datos: " + e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
